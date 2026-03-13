@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useBubbleSortStore } from "@/store/bubbleSortStore";
+import { useSelectionSortStore } from "@/store/selectionSortStore";
 import Link from "next/link";
 import s from "../sort-page.module.css";
 import GuideModal from "@/components/sort/GuideModal";
@@ -11,8 +11,8 @@ import SortControls from "@/components/sort/SortControls";
 import SortStatsPanel from "@/components/sort/SortStatsPanel";
 import SortLegend from "@/components/sort/SortLegend";
 
-export default function BubbleSortPage() {
-  const { steps, currentStep, isPlaying, isReversed, init, play, pause, next, prev, reset, ending, randomize, reverse } = useBubbleSortStore();
+export default function SelectionSortPage() {
+  const { steps, currentStep, isPlaying, isReversed, init, play, pause, next, prev, reset, ending, randomize, reverse } = useSelectionSortStore();
 
   const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
@@ -29,7 +29,7 @@ export default function BubbleSortPage() {
   const isFirst = currentStep === 0;
   const progress = steps.length > 1 ? (currentStep / (steps.length - 1)) * 100 : 0;
 
-  const comparisons = steps.slice(0, currentStep + 1).filter((st) => st.comparingIndices !== null).length;
+  const comparisons = steps.slice(0, currentStep + 1).filter((st) => st.comparingIndices !== null && !st.swapped).length;
   const swaps = steps.slice(0, currentStep + 1).filter((st) => st.swapped).length;
 
   if (!step) return null;
@@ -38,16 +38,16 @@ export default function BubbleSortPage() {
     <main className={s.page}>
       {/* ── 가이드 모달 ── */}
       {showGuide && (
-        <GuideModal title="🫧 Bubble Sort 사용 가이드" onClose={() => setShowGuide(false)}>
+        <GuideModal title="🎯 Selection Sort 사용 가이드" onClose={() => setShowGuide(false)}>
           {/* 1. 개념 */}
           <div className={s.guideSection}>
-            <h3 className={s.guideSectionTitle}>📌 버블 소트란?</h3>
+            <h3 className={s.guideSectionTitle}>📌 선택 정렬이란?</h3>
             <ul className={s.guideList}>
-              <li>인접한 두 원소를 비교해서 순서가 잘못됐으면 교환하는 정렬 알고리즘입니다.</li>
-              <li>한 번의 패스(pass)가 끝나면 가장 큰 값이 맨 뒤에 확정됩니다.</li>
-              <li>이 과정을 n-1번 반복하면 배열 전체가 정렬됩니다.</li>
+              <li>배열을 앞에서부터 확정하며 정렬하는 알고리즘입니다.</li>
+              <li>미정렬 부분에서 최소값(또는 최대값)을 찾아 현재 위치와 교환합니다.</li>
+              <li>한 번의 패스가 끝나면 현재 위치의 값이 확정됩니다.</li>
               <li>
-                거품이 위로 올라오듯 큰 값이 뒤로 이동한다고 해서 <strong>버블(Bubble)</strong> 소트입니다.
+                최소값을 <strong>선택</strong>하여 앞으로 이동시킨다고 해서 <strong>선택(Selection)</strong> 정렬입니다.
               </li>
             </ul>
           </div>
@@ -58,15 +58,11 @@ export default function BubbleSortPage() {
             <div className={s.guideRows}>
               <div className={s.guideRow}>
                 <span className={`${s.guideTag} ${s.cyan}`}>오름차순</span>
-                <span className={s.guideRowDesc}>
-                  작은 수 → 큰 수 순으로 정렬. 기본 모드. 비교 조건: <code>arr[j] &gt; arr[j+1]</code>
-                </span>
+                <span className={s.guideRowDesc}>작은 수 → 큰 수 순으로 정렬. 기본 모드. 최소값을 찾아 앞으로 이동</span>
               </div>
               <div className={s.guideRow}>
                 <span className={`${s.guideTag} ${s.cyan}`}>내림차순</span>
-                <span className={s.guideRowDesc}>
-                  큰 수 → 작은 수 순으로 정렬. 비교 조건: <code>arr[j] &lt; arr[j+1]</code>
-                </span>
+                <span className={s.guideRowDesc}>큰 수 → 작은 수 순으로 정렬. 최대값을 찾아 앞으로 이동</span>
               </div>
             </div>
           </div>
@@ -112,11 +108,11 @@ export default function BubbleSortPage() {
             <div className={s.guideBtnList}>
               <div className={s.guideBtnRow}>
                 <span className={`${s.guideBtnKey} ${s.yellow}`}>비교 횟수</span>
-                <span className={s.guideBtnDesc}>현재까지 두 원소를 비교한 횟수입니다.</span>
+                <span className={s.guideBtnDesc}>미정렬 부분에서 값을 비교한 횟수입니다.</span>
               </div>
               <div className={s.guideBtnRow}>
                 <span className={`${s.guideBtnKey} ${s.rose}`}>교환 횟수</span>
-                <span className={s.guideBtnDesc}>비교 후 실제로 자리를 바꾼 횟수입니다.</span>
+                <span className={s.guideBtnDesc}>최소값을 찾아 현재 위치와 맞바꾼 횟수입니다.</span>
               </div>
               <div className={s.guideBtnRow}>
                 <span className={`${s.guideBtnKey} ${s.green}`}>완료된 요소</span>
@@ -137,8 +133,8 @@ export default function BubbleSortPage() {
           ← 홈
         </Link>
         <div className={s.divider} />
-        <h1 className={s.headerTitle}>🫧 Bubble Sort</h1>
-        <span className={s.headerSub}>— 인접한 두 원소를 비교해 정렬</span>
+        <h1 className={s.headerTitle}>🎯 Selection Sort</h1>
+        <span className={s.headerSub}>— 최소값을 찾아 정렬</span>
         <button className={s.guideBtn} onClick={() => setShowGuide(true)}>
           ❓ 가이드
         </button>
@@ -147,9 +143,7 @@ export default function BubbleSortPage() {
       <div className={s.content}>
         <div className={s.left}>
           <SortProgressBanner progress={progress} currentStep={currentStep} totalSteps={steps.length - 1} isLast={isLast} swapped={step.swapped} comparingIndices={step.comparingIndices} />
-
-          <SortBarChart bars={step.bars} />
-
+          <SortBarChart bars={step.bars} targetIndex={step.targetIndex} />
           <SortControls
             isPlaying={isPlaying}
             isFirst={isFirst}

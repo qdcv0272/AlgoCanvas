@@ -9,12 +9,13 @@ export interface Bar {
 
 export interface Step {
   bars: Bar[];
-  comparingIndices: [number, number] | null;
+  comparingIndices: [number, number] | null; // 비교 중인 고정점과 탐색점
   swapped: boolean;
-  sortedCount: number; // 뒤에서 몇 개가 정렬됐는지
+  sortedCount: number; // 앞에서 몇 개가 정렬됐는지
+  targetIndex: number | null; // 최솟값이 놓일 자리 (현재 패스의 기준 위치 i)
 }
 
-interface BubbleSortStore {
+interface SelectionSortStore {
   steps: Step[];
   currentStep: number;
   isPlaying: boolean;
@@ -48,49 +49,60 @@ function buildSteps(arr: number[], descending = false): Step[] {
     comparingIndices: null,
     swapped: false,
     sortedCount: 0,
+    targetIndex: null,
   });
 
   let sortedCount = 0;
 
   for (let i = 0; i < n - 1; i++) {
-    for (let j = 0; j < n - 1 - i; j++) {
-      // 비교 단계
+    let minIdx = i;
+
+    // 최소값(또는 최대값) 찾기
+    for (let j = i + 1; j < n; j++) {
+      // 비교 단계 (현재 최소값 위치 minIdx와 탐색 위치 j를 비교)
       const compareBars: Bar[] = a.map((v, idx) => {
-        if (idx === j || idx === j + 1) return { value: v, state: "comparing" };
-        if (idx >= n - i) return { value: v, state: "sorted" };
+        if (idx < i) return { value: v, state: "sorted" };
+        if (idx === minIdx) return { value: v, state: "comparing" };
+        if (idx === j) return { value: v, state: "comparing" };
         return { value: v, state: "default" };
       });
 
       steps.push({
         bars: compareBars,
-        comparingIndices: [j, j + 1],
+        comparingIndices: [minIdx, j],
         swapped: false,
         sortedCount,
+        targetIndex: i,
       });
 
-      const shouldSwap = descending ? a[j] < a[j + 1] : a[j] > a[j + 1];
-
-      if (shouldSwap) {
-        [a[j], a[j + 1]] = [a[j + 1], a[j]];
-
-        const swapBars: Bar[] = a.map((v, idx) => {
-          if (idx === j || idx === j + 1) return { value: v, state: "swapping" };
-          if (idx >= n - i) return { value: v, state: "sorted" };
-          return { value: v, state: "default" };
-        });
-
-        steps.push({
-          bars: swapBars,
-          comparingIndices: [j, j + 1],
-          swapped: true,
-          sortedCount,
-        });
+      const shouldUpdate = descending ? a[j] > a[minIdx] : a[j] < a[minIdx];
+      if (shouldUpdate) {
+        minIdx = j;
       }
+    }
+
+    // 교환 단계
+    if (minIdx !== i) {
+      [a[i], a[minIdx]] = [a[minIdx], a[i]];
+
+      const swapBars: Bar[] = a.map((v, idx) => {
+        if (idx === i || idx === minIdx) return { value: v, state: "swapping" };
+        if (idx < i) return { value: v, state: "sorted" };
+        return { value: v, state: "default" };
+      });
+
+      steps.push({
+        bars: swapBars,
+        comparingIndices: [i, minIdx],
+        swapped: true,
+        sortedCount,
+        targetIndex: i,
+      });
     }
 
     sortedCount = i + 1;
     const passEndBars: Bar[] = a.map((v, idx) => {
-      if (idx >= n - sortedCount) return { value: v, state: "sorted" };
+      if (idx <= i) return { value: v, state: "sorted" };
       return { value: v, state: "default" };
     });
 
@@ -99,6 +111,7 @@ function buildSteps(arr: number[], descending = false): Step[] {
       comparingIndices: null,
       swapped: false,
       sortedCount,
+      targetIndex: null,
     });
   }
 
@@ -108,6 +121,7 @@ function buildSteps(arr: number[], descending = false): Step[] {
     comparingIndices: null,
     swapped: false,
     sortedCount: n,
+    targetIndex: null,
   });
 
   return steps;
@@ -115,7 +129,7 @@ function buildSteps(arr: number[], descending = false): Step[] {
 
 let playTimer: ReturnType<typeof setTimeout> | null = null;
 
-export const useBubbleSortStore = create<BubbleSortStore>((set, get) => ({
+export const useSelectionSortStore = create<SelectionSortStore>((set, get) => ({
   steps: [],
   currentStep: 0,
   isPlaying: false,
