@@ -215,6 +215,9 @@
 .guideBtnKey.cyan {
   color: #22d3ee;
 }
+.guideBtnKey.purple {
+  color: #a78bfa;
+}
 
 .guideBtnDesc {
   font-size: 12px;
