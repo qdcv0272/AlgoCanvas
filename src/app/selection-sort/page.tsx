@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelectionSortStore } from "@/store/selectionSortStore";
 import Link from "next/link";
 import s from "../sort-page.module.css";
-import GuideModal from "@/components/sort/GuideModal";
+import GuideModal from "@/components/GuideModal";
 import SortBarChart from "@/components/sort/SortBarChart";
 import SortProgressBanner from "@/components/sort/SortProgressBanner";
 import SortControls from "@/components/sort/SortControls";

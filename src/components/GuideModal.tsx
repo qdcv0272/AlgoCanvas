@@ -1,5 +1,5 @@
 import React from "react";
-import s from "./sort.module.css";
+import s from "./guideModal.module.css";
 
 interface GuideModalProps {
   title: string;
