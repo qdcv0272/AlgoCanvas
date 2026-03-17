@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./guideModal.module.css";
 
 interface GuideModalProps {
@@ -8,6 +8,13 @@ interface GuideModalProps {
 }
 
 export default function GuideModal({ title, onClose, children }: GuideModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
     <div className={s.modalOverlay} onClick={onClose}>
       <div className={s.modal} onClick={(e) => e.stopPropagation()}>
