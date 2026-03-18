@@ -6,13 +6,11 @@ const categories = [
   { id: 2, title: "Selection Sort", description: "최솟값을 찾아 앞으로 이동", href: "/selection-sort", theme: "orange", icon: "🎯" },
   { id: 3, title: "Insertion Sort", description: "카드 정렬처럼 적절한 위치에 삽입", href: "/insertion-sort", theme: "yellow", icon: "🃏" },
   { id: 4, title: "Binary Search", description: "정렬된 배열에서 절반씩 탐색", href: "/binary-search", theme: "lime", icon: "🔍" },
-  { id: 5, title: "DFS", description: "깊이 우선 탐색 — 스택/재귀", href: "/dfs", theme: "green", icon: "🌲" },
-  { id: 6, title: "BFS", description: "너비 우선 탐색 — 큐 활용", href: "/bfs", theme: "teal", icon: "🌊" },
-  { id: 7, title: "Merge Sort", description: "분할 정복으로 병합 정렬", href: "/merge-sort", theme: "cyan", icon: "🔀" },
-  { id: 8, title: "Quick Sort", description: "피벗 기준으로 분할 정렬", href: "/quick-sort", theme: "blue", icon: "⚡" },
-  { id: 9, title: "Union Find", description: "서로소 집합 — 합집합 탐색", href: "/union-find", theme: "indigo", icon: "🔗" },
-  { id: 10, title: "Dijkstra", description: "최단 경로 알고리즘", href: "/dijkstra", theme: "purple", icon: "🗺️" },
-  { id: 11, title: "TailwindCSS", description: "클래스 레퍼런스 정리", href: "/tailwind-reference", theme: "pink", icon: "🎨" },
+  { id: 5, title: "Greedy", description: "매 순간 최선의 선택을 반복", href: "/greedy", theme: "cyan", icon: "💡" },
+  { id: 6, title: "DFS", description: "깊이 우선 탐색 — 스택/재귀", href: "/dfs", theme: "green", icon: "🌲" },
+  { id: 7, title: "BFS", description: "너비 우선 탐색 — 큐 활용", href: "/bfs", theme: "teal", icon: "🌊" },
+  { id: 8, title: "DP", description: "중복 계산을 줄이는 동적 프로그래밍", href: "/dp", theme: "blue", icon: "🧩" },
+  { id: 9, title: "Dijkstra", description: "가중 그래프에서 최단 경로 탐색", href: "/dijkstra", theme: "pink", icon: "🗺️" },
 ];
 
 export default function Home() {
