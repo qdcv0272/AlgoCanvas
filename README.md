@@ -196,8 +196,8 @@ src/
 
 - [✅] Bubble Sort
 - [✅] Selection Sort
-- [ ] Insertion Sort
-- [ ] Binary Search
+- [✅] Insertion Sort
+- [✅] Binary Search
 - [ ] DFS
 - [ ] BFS
 - [ ] Merge Sort

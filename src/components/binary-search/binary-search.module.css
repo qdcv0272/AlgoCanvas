@@ -1,0 +1,405 @@
+/* ── Binary Search Chart ──────────────────────────────────── */
+.chartBox {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Target display ──────────────────────────────────────── */
+.targetRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.targetLabel {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.targetValue {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #1e3a5f;
+  border: 2px solid #06b6d4;
+  color: #22d3ee;
+  font-size: 20px;
+  font-weight: 900;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
+}
+
+/* ── Bars ──────────────────────────────────────────────────── */
+.barsWrapper {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.barsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  min-width: max-content;
+  margin: 0 auto;
+}
+
+.barSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 40px;
+}
+
+.barBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-family: monospace;
+  font-weight: 700;
+  border: 2px solid transparent;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.barBox.default {
+  color: #9ca3af;
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.barBox.mid {
+  color: #1a1a1a;
+  background: #facc15;
+  border-color: #fbbf24;
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.7);
+}
+
+.barBox.eliminated {
+  color: #374151;
+  background: #0d1117;
+  border-color: #1a2232;
+}
+
+.barBox.found {
+  color: #fff;
+  background: #10b981;
+  border-color: #34d399;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.8);
+  animation: pop 0.35s ease-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ── Pointer row ─────────────────────────────────────────── */
+.ptrRow {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  height: 16px;
+}
+
+.ptr {
+  font-size: 10px;
+  font-weight: 800;
+  font-family: monospace;
+  line-height: 1;
+}
+
+.ptrL {
+  color: #06b6d4;
+}
+.ptrM {
+  color: #facc15;
+}
+.ptrH {
+  color: #f472b6;
+}
+
+/* ── Index row ───────────────────────────────────────────── */
+.indexRow {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.indexLabel {
+  width: 40px;
+  text-align: center;
+  font-size: 10px;
+  color: #374151;
+  font-family: monospace;
+}
+
+/* ── Banner ──────────────────────────────────────────────── */
+.banner {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bannerTopRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bannerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bannerDot.idle {
+  background: #4b5563;
+}
+.bannerDot.comparing {
+  background: #facc15;
+  animation: pulse 1s infinite;
+}
+.bannerDot.found {
+  background: #34d399;
+}
+.bannerDot.notFound {
+  background: #f43f5e;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.bannerProgress {
+  flex: 1;
+}
+
+.progressTrack {
+  height: 6px;
+  background: #1f2937;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #06b6d4;
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+
+.bannerStepLabel {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bannerMessage {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: monospace;
+  line-height: 1.5;
+  padding: 6px 10px;
+  background: #0d1117;
+  border-radius: 6px;
+  border: 1px solid #1f2937;
+  word-break: break-all;
+}
+
+/* ── Controls ────────────────────────────────────────────── */
+.controls {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btnRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ctrlBtn {
+  min-width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #1f2937;
+  border: 1px solid transparent;
+  color: #f9fafb;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  white-space: nowrap;
+}
+
+.ctrlBtn:hover:not(:disabled) {
+  background: #374151;
+}
+
+.ctrlBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.playBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.playBtn.play {
+  background: #06b6d4;
+}
+.playBtn.play:hover {
+  background: #22d3ee;
+}
+.playBtn.pause {
+  background: #eab308;
+}
+.playBtn.pause:hover {
+  background: #facc15;
+}
+.playBtn:disabled {
+  background: #374151;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* ── Legend ──────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ── Stats Panel ─────────────────────────────────────────── */
+.card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.statBox {
+  background: #0d1117;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: #4b5563;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.statValue {
+  font-size: 22px;
+  font-weight: 900;
+  font-family: monospace;
+  margin: 0;
+}
+
+.statValue.yellow {
+  color: #facc15;
+}
+.statValue.cyan {
+  color: #22d3ee;
+}
+.statValue.green {
+  color: #34d399;
+}
+.statValue.rose {
+  color: #fb7185;
+}
