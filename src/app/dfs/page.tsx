@@ -157,7 +157,7 @@ export default function DfsPage() {
         </div>
 
         <div className={s.right}>
-          <DfsStackPanel stack={step.stack} visitOrder={step.visitOrder} currentNode={step.currentNode} totalNodes={NODES.length} />
+          <DfsStackPanel stack={step.stack} visitOrder={step.visitOrder} totalNodes={NODES.length} />
         </div>
       </div>
     </main>

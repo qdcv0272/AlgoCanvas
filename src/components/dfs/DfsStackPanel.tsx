@@ -3,7 +3,6 @@ import s from "./dfs.module.css";
 interface Props {
   stack: number[];
   visitOrder: number[];
-  currentNode: number | null;
   totalNodes: number;
 }
 

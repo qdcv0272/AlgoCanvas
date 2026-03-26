@@ -6,9 +6,10 @@ interface SortStatsPanelProps {
   sortedCount: number;
   totalBars: number;
   currentStep: number;
+  swapLabel?: string;
 }
 
-export default function SortStatsPanel({ comparisons, swaps, sortedCount, totalBars, currentStep }: SortStatsPanelProps) {
+export default function SortStatsPanel({ comparisons, swaps, sortedCount, totalBars, currentStep, swapLabel = "교환 횟수" }: SortStatsPanelProps) {
   return (
     <div className={s.card}>
       <div className={s.statsGrid}>
@@ -17,7 +18,7 @@ export default function SortStatsPanel({ comparisons, swaps, sortedCount, totalB
           <p className={`${s.statValue} ${s.yellow}`}>{comparisons}</p>
         </div>
         <div className={s.statBox}>
-          <p className={s.statLabel}>교환 횟수</p>
+          <p className={s.statLabel}>{swapLabel}</p>
           <p className={`${s.statValue} ${s.rose}`}>{swaps}</p>
         </div>
         <div className={s.statBox}>

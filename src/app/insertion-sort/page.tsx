@@ -164,7 +164,7 @@ export default function InsertionSortPage() {
         </div>
 
         <div className={s.right}>
-          <SortStatsPanel comparisons={comparisons} swaps={shifts} sortedCount={step.sortedCount} totalBars={step.bars.length} currentStep={currentStep} />
+          <SortStatsPanel comparisons={comparisons} swaps={shifts} sortedCount={step.sortedCount} totalBars={step.bars.length} currentStep={currentStep} swapLabel="이동 횟수" />
         </div>
       </div>
     </main>

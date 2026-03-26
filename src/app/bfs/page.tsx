@@ -9,7 +9,7 @@ import SortProgressBanner from "@/components/sort/SortProgressBanner";
 import BfsGraph from "@/components/bfs/BfsGraph";
 import BfsQueuePanel from "@/components/bfs/BfsQueuePanel";
 import DfsControls from "@/components/dfs/DfsControls";
-import DfsLegend from "@/components/dfs/DfsLegend";
+import BfsLegend from "@/components/bfs/BfsLegend";
 
 export default function BfsPage() {
   const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending } = useBfsStore();
@@ -131,7 +131,7 @@ export default function BfsPage() {
           />
           <BfsGraph nodeStates={step.nodeStates} currentNode={step.currentNode} />
           <DfsControls isPlaying={isPlaying} isFirst={isFirst} isLast={isLast} onPlay={play} onPause={pause} onNext={next} onPrev={prev} onReset={reset} onEnding={ending} />
-          <DfsLegend />
+          <BfsLegend />
         </div>
         <div className={s.right}>
           <BfsQueuePanel queue={step.queue} visitOrder={step.visitOrder} totalNodes={BFS_NODES.length} />
