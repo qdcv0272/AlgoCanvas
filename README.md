@@ -198,8 +198,8 @@ src/
 - [✅] Selection Sort
 - [✅] Insertion Sort
 - [✅] Binary Search
-- [ ] DFS
-- [ ] BFS
+- [✅] DFS
+- [✅] BFS
 - [ ] Merge Sort
 - [ ] Quick Sort
 - [ ] Union Find
