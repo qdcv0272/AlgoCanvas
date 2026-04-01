@@ -135,22 +135,41 @@ const stateClass: Record<BarState, string> = {
 src/
 ├── app/
 │   ├── page.tsx                   # 메인 홈 (알고리즘 목록 카드)
-│   ├── sort-page.module.css       # 정렬 페이지 공통 레이아웃 (두 페이지가 공유)
+│   ├── sort-page.module.css       # 정렬 페이지 공통 레이아웃
 │   ├── bubble-sort/page.tsx       # Bubble Sort 페이지
 │   ├── selection-sort/page.tsx    # Selection Sort 페이지
-│   └── dfs/page.tsx               # DFS 페이지
+│   ├── insertion-sort/page.tsx    # Insertion Sort 페이지
+│   ├── binary-search/page.tsx     # Binary Search 페이지
+│   ├── dfs/page.tsx               # DFS 페이지
+│   ├── bfs/page.tsx               # BFS 페이지
+│   ├── dijkstra/page.tsx          # Dijkstra 페이지
+│   ├── dp/page.tsx                # DP (LCS) 페이지
+│   └── greedy/page.tsx            # Greedy (Activity Selection) 페이지
 ├── components/
 │   ├── CtrlBtn.tsx                # 범용 컨트롤 버튼
-│   └── sort/
-│       ├── SortBarChart.tsx       # 핵심 시각화: 숫자 막대 렌더링
-│       ├── SortControls.tsx       # 재생·이전·다음·정렬방향 버튼
-│       ├── SortStatsPanel.tsx     # 비교/교환 횟수 통계
-│       ├── SortProgressBanner.tsx # 진행도 프로그레스바
-│       ├── SortLegend.tsx         # 색상 범례
-│       └── GuideModal.tsx         # 사용 가이드 모달
+│   ├── GuideModal.tsx             # 사용 가이드 모달
+│   ├── sort/                      # 정렬 알고리즘 공통 컴포넌트
+│   │   ├── SortBarChart.tsx       # 핵심 시각화: 숫자 막대 렌더링
+│   │   ├── SortControls.tsx       # 재생·이전·다음·정렬방향 버튼
+│   │   ├── SortStatsPanel.tsx     # 비교/교환 횟수 통계
+│   │   ├── SortProgressBanner.tsx # 진행도 프로그레스바
+│   │   └── SortLegend.tsx         # 색상 범례
+│   ├── binary-search/             # Binary Search 전용 컴포넌트
+│   ├── dfs/                       # DFS 전용 컴포넌트
+│   ├── bfs/                       # BFS 전용 컴포넌트
+│   ├── dijkstra/                  # Dijkstra 전용 컴포넌트
+│   ├── dp/                        # DP 전용 컴포넌트
+│   └── greedy/                    # Greedy 전용 컴포넌트
 └── store/
-    ├── bubbleSortStore.ts         # Bubble Sort 상태 (steps, currentStep, play 등)
-    └── selectionSortStore.ts      # Selection Sort 상태 (+ targetIndex)
+    ├── bubbleSortStore.ts         # Bubble Sort 상태
+    ├── selectionSortStore.ts      # Selection Sort 상태 (+ targetIndex)
+    ├── insertionSortStore.ts      # Insertion Sort 상태
+    ├── binarySearchStore.ts       # Binary Search 상태
+    ├── dfsStore.ts                # DFS 상태 (스택 시각화)
+    ├── bfsStore.ts                # BFS 상태 (큐 시각화)
+    ├── dijkstraStore.ts           # Dijkstra 상태 (최단 거리 테이블)
+    ├── dpStore.ts                 # DP 상태 (LCS 테이블)
+    └── greedyStore.ts             # Greedy 상태 (활동 선택)
 ```
 
 ### 데이터 흐름
@@ -200,7 +219,6 @@ src/
 - [✅] Binary Search
 - [✅] DFS
 - [✅] BFS
-- [ ] Merge Sort
-- [ ] Quick Sort
-- [ ] Union Find
-- [ ] Dijkstra
+- [✅] Dijkstra
+- [✅] DP (LCS)
+- [✅] Greedy (Activity Selection)
