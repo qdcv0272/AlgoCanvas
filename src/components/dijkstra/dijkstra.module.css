@@ -1,0 +1,371 @@
+/* ── Graph Box ─────────────────────────────────────────── */
+.graphBox {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Edges ─────────────────────────────────────────────── */
+.edge {
+  stroke: #374151;
+  stroke-width: 2;
+  transition:
+    stroke 0.3s,
+    stroke-width 0.3s;
+}
+
+.edgeExamining {
+  stroke: #06b6d4;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.6));
+}
+
+.edgeOptimal {
+  stroke: #f59e0b;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5));
+}
+
+/* ── Edge Weight Label ─────────────────────────────────── */
+.weightLabel {
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 700;
+  fill: #6b7280;
+  pointer-events: none;
+  transition: fill 0.3s;
+}
+
+.weightLabelExamining {
+  fill: #22d3ee;
+}
+
+.weightLabelOptimal {
+  fill: #fcd34d;
+}
+
+.weightBg {
+  fill: #030712;
+}
+
+/* ── Nodes ─────────────────────────────────────────────── */
+.nodeGroup {
+  transition: all 0.3s;
+}
+
+.node {
+  stroke-width: 2.5;
+  transition:
+    fill 0.3s,
+    stroke 0.3s,
+    filter 0.3s;
+}
+
+.node.unvisited {
+  fill: #1f2937;
+  stroke: #374151;
+}
+
+.node.inQueue {
+  fill: #7c3aed;
+  stroke: #a78bfa;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5));
+}
+
+.node.current {
+  fill: #facc15;
+  stroke: #fbbf24;
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.7));
+}
+
+.node.settled {
+  fill: #34d399;
+  stroke: #10b981;
+}
+
+/* ── Node Text ─────────────────────────────────────────── */
+.nodeText {
+  font-size: 13px;
+  font-family: monospace;
+  font-weight: 700;
+  pointer-events: none;
+  transition: fill 0.3s;
+}
+
+.nodeText.unvisited {
+  fill: #9ca3af;
+}
+.nodeText.inQueue {
+  fill: #ddd6fe;
+}
+.nodeText.current {
+  fill: #1a1a1a;
+}
+.nodeText.settled {
+  fill: #064e3b;
+}
+
+.distLabel {
+  font-size: 10px;
+  font-family: monospace;
+  font-weight: 700;
+  pointer-events: none;
+  transition: fill 0.3s;
+  fill: #9ca3af;
+}
+
+.distLabel.settled {
+  fill: #34d399;
+}
+.distLabel.inQueue {
+  fill: #c4b5fd;
+}
+.distLabel.current {
+  fill: #1a1a1a;
+}
+
+/* ── Priority Queue Panel ──────────────────────────────── */
+.pqPanel {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panelTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4b5563;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.pqItems {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 80px;
+}
+
+.pqItem {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: monospace;
+  font-weight: 700;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pqItemTop {
+  border-color: #f59e0b;
+  color: #fcd34d;
+}
+
+.pqTopLabel {
+  font-size: 10px;
+  color: #f59e0b;
+  background: #292014;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.pqEmpty {
+  font-size: 12px;
+  color: #374151;
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ── Distance Table ────────────────────────────────────── */
+.distTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.distTable th {
+  color: #4b5563;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-bottom: 1px solid #1f2937;
+  text-align: left;
+}
+
+.distTable td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #1a2133;
+  color: #6b7280;
+  transition: color 0.3s;
+}
+
+.distRow.settled td {
+  color: #34d399;
+}
+.distRow.current td {
+  color: #facc15;
+  font-weight: 700;
+}
+.distRow.inQueue td {
+  color: #c4b5fd;
+}
+
+.distNodeCell {
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.distValue {
+  font-weight: 700;
+}
+
+.distInf {
+  color: #374151;
+}
+
+.distPath {
+  font-size: 11px;
+  color: #4b5563;
+}
+
+/* ── Description Banner ────────────────────────────────── */
+.descBanner {
+  border-bottom: 1px solid #1f2937;
+  padding: 10px 24px;
+  background: #0a0f1a;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+}
+
+.descDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #374151;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.descDot.active {
+  background: #f59e0b;
+}
+.descDot.done {
+  background: #34d399;
+}
+
+.descText {
+  font-size: 13px;
+  color: #9ca3af;
+  font-family: monospace;
+  flex: 1;
+}
+
+.descProgress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.progressTrack {
+  width: 100px;
+  height: 4px;
+  background: #1f2937;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #f59e0b;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.stepLabel {
+  font-size: 11px;
+  color: #4b5563;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+/* ── Legend ─────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legendDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.legendUnvisited {
+  background: #1f2937;
+  border-color: #374151;
+}
+.legendInQueue {
+  background: #7c3aed;
+  border-color: #a78bfa;
+}
+.legendCurrent {
+  background: #facc15;
+  border-color: #fbbf24;
+}
+.legendSettled {
+  background: #34d399;
+  border-color: #10b981;
+}
+.legendExamining {
+  background: transparent;
+  border-color: #06b6d4;
+}
+.legendOptimal {
+  background: #f59e0b;
+  border-color: #fcd34d;
+  height: 4px;
+  border-radius: 2px;
+  width: 24px;
+}
