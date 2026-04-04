@@ -7,6 +7,21 @@
 
 ---
 
+## 시작 방법
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 실행 (http://localhost:3001)
+npm run dev
+
+# 테스트 실행
+npm test
+```
+
+---
+
 ## 구현 화면
 
 ### 메인 페이지
@@ -161,6 +176,7 @@ src/
 │   ├── dp/                        # DP 전용 컴포넌트
 │   └── greedy/                    # Greedy 전용 컴포넌트
 └── store/
+    ├── __tests__/                 # Vitest 단위 테스트 (9개 파일, 123개 테스트)
     ├── bubbleSortStore.ts         # Bubble Sort 상태
     ├── selectionSortStore.ts      # Selection Sort 상태 (+ targetIndex)
     ├── insertionSortStore.ts      # Insertion Sort 상태
@@ -211,6 +227,39 @@ src/
 
 ---
 
+## 테스트
+
+**Vitest** 기반 단위 테스트로 9개 알고리즘 스토어의 핵심 로직을 검증합니다.
+
+### 테스트 실행
+
+```bash
+# 단일 실행
+npm test
+
+# 감시(watch) 모드
+npm run test:watch
+
+# 커버리지 리포트 생성
+npm run test:coverage
+```
+
+### 테스트 범위 (9개 파일, 123개 테스트)
+
+| 테스트 파일                  | 주요 검증 항목                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| `bubbleSortStore.test.ts`    | 스텝 생성, 오름차순/내림차순 정렬 결과, next/prev/reset/ending, reverse 토글   |
+| `selectionSortStore.test.ts` | 스텝 생성, 정렬 결과, 비교 스텝 존재 여부, sortedCount                         |
+| `insertionSortStore.test.ts` | 스텝 생성, 정렬 결과, comparing/swapping 상태 존재 여부                        |
+| `binarySearchStore.test.ts`  | 정렬된 배열 생성, found/notFound 결과, changeTarget 동작                       |
+| `dfsStore.test.ts`           | DFS 방문 순서 `[1,2,4,8,9,5,3,6,10,7]`, 모든 노드 visited                      |
+| `bfsStore.test.ts`           | BFS 방문 순서 `[1,2,3,4,5,6,7,8,9,10]`, DFS와의 방문 순서 차이                 |
+| `dijkstraStore.test.ts`      | 최단 거리 정확성 (1→2: 3, 1→3: 2, 1→4: 8, 1→5: 10, 1→6: 13), 모든 노드 settled |
+| `dpStore.test.ts`            | 피보나치 수열 값 정확성 (dp[10]=55), computing/referencing 상태, changeN       |
+| `greedyStore.test.ts`        | 거스름돈 최소 동전 수 (890원→9개), 각 동전 사용 횟수, 합계 검증                |
+
+---
+
 ## 계획
 
 - [✅] Bubble Sort
@@ -220,5 +269,5 @@ src/
 - [✅] DFS
 - [✅] BFS
 - [✅] Dijkstra
-- [✅] DP (LCS)
-- [✅] Greedy (Activity Selection)
+- [✅] DP (피보나치)
+- [✅] Greedy (거스름돈)
