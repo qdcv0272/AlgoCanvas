@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AuthInfoModal from "@/components/AuthInfoModal";
 import s from "./page.module.css";
 
 const categories = [
@@ -19,6 +20,7 @@ export default function Home() {
       <div className={s.hero}>
         <h1 className={s.title}>AlgoCanvas</h1>
         <p className={s.subtitle}>알고리즘 시각화</p>
+        <AuthInfoModal />
       </div>
 
       <div className={s.grid}>

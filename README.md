@@ -13,8 +13,16 @@
 # 의존성 설치
 npm install
 
-# 개발 서버 실행 (http://localhost:3001)
-npm run dev
+# 환경 변수 설정
+cp .env.example .env
+# .env의 JWT_SECRET을 안전한 값으로 변경
+
+# DB 초기화 (최초 1회)
+npm run db:migrate
+
+# 개발 서버 실행 — 두 터미널을 동시에 실행
+npm run server:dev   # Express API 서버 (http://localhost:3002)
+npm run dev          # Next.js 앱 (http://localhost:3001)
 
 # 테스트 실행
 npm test
@@ -276,7 +284,7 @@ npm run test:coverage
 
 ---
 
-## 계획
+## 구현 완료
 
 - [✅] Bubble Sort
 - [✅] Selection Sort
@@ -287,3 +295,23 @@ npm run test:coverage
 - [✅] Dijkstra
 - [✅] DP (피보나치)
 - [✅] Greedy (거스름돈)
+
+---
+
+## 향후 개발 계획
+
+현재 알고리즘 시각화 기능 외에, 학습 경험을 더욱 풍부하게 만들기 위해 아래 기능들을 순차적으로 추가할 예정입니다.
+
+- [ ] 회원가입 및 로그인 — Express + Prisma 기반 REST API 서버를 구축하고, Next.js API Routes와 연동해 JWT 인증을 구현할 예정
+- [ ] 커스텀 입력 저장 — 사용자가 직접 입력한 배열·그래프 데이터를 Prisma(DB)에 저장하고 나중에 불러올 수 있는 기능
+- [ ] 학습 진도 기록 — 알고리즘별 실행 횟수·마지막 실행 시각을 DB에 기록해 학습 히스토리를 제공하는 기능
+- [ ] 알고리즘 북마크 — 즐겨찾는 알고리즘에 북마크를 달고 개인 메모를 DB에 저장할 수 있는 기능
+
+### 예정 백엔드 기술 스택
+
+| 구분        | 기술               | 역할                                              |
+| ----------- | ------------------ | ------------------------------------------------- |
+| 서버        | Express            | REST API 엔드포인트 (회원가입·로그인·데이터 CRUD) |
+| ORM         | Prisma             | DB 스키마 정의 및 타입 안전한 쿼리                |
+| 인증        | JWT                | 로그인 후 토큰 발급, Next.js 미들웨어에서 검증    |
+| 프론트 연동 | Next.js API Routes | Express 서버 프록시 또는 직접 Prisma Client 호출  |

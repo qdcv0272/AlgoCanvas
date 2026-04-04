@@ -1,6 +1,7 @@
 /* ── 홈 페이지 ─────────────────────────────────────── */
 .page {
   min-height: 100vh;
+  padding-top: 56px; /* fixed 헤더 높이 */
   background: #030712;
   color: #fff;
 }
