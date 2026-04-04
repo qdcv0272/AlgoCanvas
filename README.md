@@ -28,17 +28,33 @@ npm test
 
 ![메인 페이지](readmeImage/메인화면.png)
 
-### Bubble Sort
-
-![Bubble Sort](readmeImage/BubbleSort.png)
-
-### Selection Sort
-
-![Selection Sort](readmeImage/selectionSort.png)
-
 ### 가이드 모달
 
 ![가이드 모달](readmeImage/모달창.png)
+
+### Bubble Sort
+
+![Bubble Sort](readmeImage/Bubble.gif)
+
+### Binary Search
+
+![Binary Search](readmeImage/Binary.gif)
+
+### DFS
+
+![DFS](readmeImage/DFS.gif)
+
+### Dijkstra
+
+![Dijkstra](readmeImage/Dijkstra.gif)
+
+### DP (피보나치)
+
+![DP](readmeImage/DP.gif)
+
+### Greedy (거스름돈)
+
+![Greedy](readmeImage/Greedy.gif)
 
 ---
 
