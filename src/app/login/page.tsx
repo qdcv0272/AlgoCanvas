@@ -11,7 +11,7 @@ export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { token, user } = await apiLogin(email, password);
+      const { token, user } = await apiLogin(username, password);
       setAuth(token, user);
       router.push("/");
     } catch (err) {
@@ -40,10 +40,10 @@ export default function LoginPage() {
 
         <form className={s.form} onSubmit={handleSubmit}>
           <div className={s.field}>
-            <label className={s.label} htmlFor="email">
-              이메일
+            <label className={s.label} htmlFor="username">
+              아이디
             </label>
-            <input id="email" type="email" className={s.input} placeholder="example@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+            <input id="username" type="text" className={s.input} placeholder="아이디를 입력하세요" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
           </div>
 
           <div className={s.field}>
