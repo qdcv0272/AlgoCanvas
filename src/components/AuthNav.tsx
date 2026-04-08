@@ -3,16 +3,19 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { useUserDataStore } from "@/store/userDataStore";
 import s from "./AuthNav.module.css";
 
 export default function AuthNav() {
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout, isLoggedIn } = useAuthStore();
+  const clear = useUserDataStore((s) => s.clear);
   const isHome = pathname === "/";
 
   const handleLogout = () => {
     logout();
+    clear();
     router.refresh();
   };
 
