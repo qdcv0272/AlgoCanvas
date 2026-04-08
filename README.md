@@ -1,7 +1,8 @@
 # AlgoCanvas — 알고리즘 시각화 학습 플랫폼
 
 > 추상적인 알고리즘을 **단계별 인터랙티브 애니메이션**으로 시각화한 학습 플랫폼입니다.  
-> 외부 차트 라이브러리 없이 순수 CSS + SVG로 직접 구현했으며, 이전/다음/자동재생을 통해 알고리즘의 매 단계를 눈으로 확인할 수 있습니다.
+> 외부 차트 라이브러리 없이 순수 CSS + SVG로 직접 구현했으며, 이전/다음/자동재생을 통해 알고리즘의 매 단계를 눈으로 확인할 수 있습니다.  
+> 회원가입 · 로그인 후 알고리즘을 즐겨찾기하고 메모를 남길 수 있습니다.
 
 🔗 **배포 링크**: https://algocans.netlify.app/
 
@@ -13,16 +14,15 @@
 # 의존성 설치
 npm install
 
-# 환경 변수 설정
-cp .env.example .env
-# .env의 JWT_SECRET을 안전한 값으로 변경
+# 환경 변수 설정 (.env 파일 생성 후 아래 값 입력)
+# DATABASE_URL="postgresql://유저:비번@localhost:5432/algocanvas"
+# JWT_SECRET="안전한_랜덤_문자열"
 
 # DB 초기화 (최초 1회)
 npm run db:migrate
 
-# 개발 서버 실행 — 두 터미널을 동시에 실행
-npm run server:dev   # Express API 서버 (http://localhost:3002)
-npm run dev          # Next.js 앱 (http://localhost:3001)
+# 개발 서버 실행
+npm run dev   # Next.js 앱 (http://localhost:3001)
 
 # 테스트 실행
 npm test
@@ -74,6 +74,8 @@ npm test
 | 언어       | TypeScript              | `Step`, `BarState` 등 알고리즘 상태 타입을 명확히 정의해 버그 사전 차단    |
 | 상태 관리  | Zustand                 | Redux 대비 보일러플레이트가 거의 없고, 알고리즘별 독립 스토어 분리가 간단  |
 | 스타일링   | CSS Modules             | 컴포넌트 간 클래스명 충돌 없이 각 알고리즘 페이지의 스타일을 안전하게 격리 |
+| DB / ORM   | PostgreSQL + Prisma     | 타입 안전한 쿼리와 마이그레이션 관리, Netlify 환경과의 호환성              |
+| 인증       | JWT + bcryptjs          | Stateless 토큰 인증으로 별도 세션 서버 없이 API Routes에서 간단하게 검증   |
 | 런타임     | React 19                | —                                                                          |
 
 ### Zustand를 선택한 이유
@@ -166,6 +168,42 @@ const stateClass: Record<BarState, string> = {
 
 ---
 
+### 4. 로그아웃 시 잔류 데이터 — 즉시 초기화
+
+**문제**: 로그아웃 후에도 이전 사용자의 즐겨찾기·메모가 화면에 남아 있었습니다.
+
+**해결**: `useAuthStore`의 `logout()`과 `useUserDataStore`의 `clear()`를 함께 호출해 로그아웃 즉시 두 스토어를 동시에 초기화합니다.
+
+```ts
+// components/AuthNav.tsx
+const handleLogout = () => {
+  logout(); // authStore: token, user → null
+  clear(); // userDataStore: bookmarks[], memos{} → 초기값
+  router.refresh();
+};
+```
+
+---
+
+### 5. SSR Hydration 안전한 클라이언트 전용 UI — `useSyncExternalStore`
+
+**문제**: 비로그인 안내 모달을 마운트 후 자동으로 열기 위해 `useEffect` 내부에서 `setState`를 호출했더니, React 컴파일러가 "렌더 캐스케이드 유발" 오류를 발생시켰습니다.
+
+**해결**: `useSyncExternalStore`의 서버/클라이언트 snapshot을 분리해 Hydration mismatch 없이 CSR 전용 UI를 렌더링했습니다.
+
+```ts
+// components/AuthInfoModal.tsx
+const subscribe = () => () => {};
+
+const mounted = useSyncExternalStore(
+  subscribe, // 외부 구독 없음
+  () => true, // 클라이언트: 마운트됨 → 모달 표시
+  () => false, // 서버(SSR): 마운트 안 됨 → 렌더 스킵
+);
+```
+
+---
+
 ## 아키텍처 및 데이터 흐름
 
 ### 디렉토리 구조
@@ -174,7 +212,14 @@ const stateClass: Record<BarState, string> = {
 src/
 ├── app/
 │   ├── page.tsx                   # 메인 홈 (알고리즘 목록 카드)
-│   ├── sort-page.module.css       # 정렬 페이지 공통 레이아웃
+│   ├── layout.tsx                 # 공통 레이아웃 (AuthNav 포함)
+│   ├── api/
+│   │   ├── auth/register/         # POST /api/auth/register
+│   │   ├── auth/login/            # POST /api/auth/login
+│   │   ├── bookmarks/             # GET·POST·DELETE /api/bookmarks
+│   │   └── memos/                 # GET·PUT·DELETE /api/memos
+│   ├── login/page.tsx             # 로그인 페이지
+│   ├── register/page.tsx          # 회원가입 페이지
 │   ├── bubble-sort/page.tsx       # Bubble Sort 페이지
 │   ├── selection-sort/page.tsx    # Selection Sort 페이지
 │   ├── insertion-sort/page.tsx    # Insertion Sort 페이지
@@ -182,9 +227,13 @@ src/
 │   ├── dfs/page.tsx               # DFS 페이지
 │   ├── bfs/page.tsx               # BFS 페이지
 │   ├── dijkstra/page.tsx          # Dijkstra 페이지
-│   ├── dp/page.tsx                # DP (LCS) 페이지
-│   └── greedy/page.tsx            # Greedy (Activity Selection) 페이지
+│   ├── dp/page.tsx                # DP (피보나치) 페이지
+│   └── greedy/page.tsx            # Greedy (활동 선택) 페이지
 ├── components/
+│   ├── AuthNav.tsx                # 상단 Nav (로그인/로그아웃 상태 반영)
+│   ├── AuthInfoModal.tsx          # 비로그인 사용자 안내 모달
+│   ├── AlgoGrid.tsx               # 알고리즘 카드 그리드 (북마크·메모 버튼 포함)
+│   ├── MemoModal.tsx              # 메모 작성/수정/삭제 모달
 │   ├── CtrlBtn.tsx                # 범용 컨트롤 버튼
 │   ├── GuideModal.tsx             # 사용 가이드 모달
 │   ├── sort/                      # 정렬 알고리즘 공통 컴포넌트
@@ -199,8 +248,14 @@ src/
 │   ├── dijkstra/                  # Dijkstra 전용 컴포넌트
 │   ├── dp/                        # DP 전용 컴포넌트
 │   └── greedy/                    # Greedy 전용 컴포넌트
+├── lib/
+│   ├── api.ts                     # fetch 래퍼 (register·login·bookmark·memo)
+│   ├── auth.ts                    # JWT 발급·검증 유틸
+│   └── prisma.ts                  # Prisma Client 싱글턴
 └── store/
     ├── __tests__/                 # Vitest 단위 테스트 (9개 파일, 123개 테스트)
+    ├── authStore.ts               # 로그인 상태 (token, user) — persist
+    ├── userDataStore.ts           # 북마크·메모 상태 (서버 동기화)
     ├── bubbleSortStore.ts         # Bubble Sort 상태
     ├── selectionSortStore.ts      # Selection Sort 상태 (+ targetIndex)
     ├── insertionSortStore.ts      # Insertion Sort 상태
@@ -208,11 +263,11 @@ src/
     ├── dfsStore.ts                # DFS 상태 (스택 시각화)
     ├── bfsStore.ts                # BFS 상태 (큐 시각화)
     ├── dijkstraStore.ts           # Dijkstra 상태 (최단 거리 테이블)
-    ├── dpStore.ts                 # DP 상태 (LCS 테이블)
+    ├── dpStore.ts                 # DP 상태 (피보나치 테이블)
     └── greedyStore.ts             # Greedy 상태 (활동 선택)
 ```
 
-### 데이터 흐름
+### 데이터 흐름 — 알고리즘 시각화
 
 ```
 사용자 입력 (버튼 클릭)
@@ -237,6 +292,29 @@ src/
         └── SortProgressBanner ← progress, currentStep
 ```
 
+### 데이터 흐름 — 인증 및 사용자 데이터
+
+```
+로그인 성공
+        │  JWT 토큰 발급
+        ▼
+  authStore (persist)           ← 새로고침 후에도 로그인 유지
+  { token, user }
+        │
+        │  token으로 API 호출
+        ▼
+  userDataStore.fetchAll()
+  { bookmarks: string[], memos: Record<string, string> }
+        │
+        ├── AlgoGrid  ← 북마크 별(★) 색상 표시
+        └── MemoModal ← 메모 내용 표시·저장·삭제
+
+로그아웃
+        │
+        ├── authStore.logout()      → token, user = null
+        └── userDataStore.clear()   → bookmarks = [], memos = {}
+```
+
 ---
 
 ## 주요 기능
@@ -248,6 +326,9 @@ src/
 - **통계 패널** : 현재까지의 비교 횟수·교환 횟수·정렬 완료 개수를 실시간으로 표시합니다.
 - **목표 위치 표시기 (Selection Sort 전용)** : 현재 패스에서 최솟값이 놓일 자리를 `▼` 화살표로 표시합니다.
 - **가이드 모달** : 알고리즘 개념·동작 순서·색상 의미·버튼 설명이 담긴 도움말 모달을 제공합니다.
+- **회원가입 · 로그인** : Next.js API Routes + Prisma + PostgreSQL 기반. 비밀번호는 bcryptjs로 해시 저장, JWT로 인증합니다.
+- **알고리즘 즐겨찾기** : 로그인 후 알고리즘 카드에서 ★ 버튼으로 즐겨찾기를 DB에 저장합니다.
+- **메모** : 알고리즘별로 개인 메모를 작성·수정·삭제할 수 있습니다.
 
 ---
 
@@ -295,23 +376,13 @@ npm run test:coverage
 - [✅] Dijkstra
 - [✅] DP (피보나치)
 - [✅] Greedy (거스름돈)
+- [✅] 회원가입 · 로그인 (Next.js API Routes + Prisma + JWT)
+- [✅] 알고리즘 즐겨찾기
+- [✅] 알고리즘 메모
 
 ---
 
 ## 향후 개발 계획
 
-현재 알고리즘 시각화 기능 외에, 학습 경험을 더욱 풍부하게 만들기 위해 아래 기능들을 순차적으로 추가할 예정입니다.
-
-- [ ] 회원가입 및 로그인 — Express + Prisma 기반 REST API 서버를 구축하고, Next.js API Routes와 연동해 JWT 인증을 구현할 예정
-- [ ] 커스텀 입력 저장 — 사용자가 직접 입력한 배열·그래프 데이터를 Prisma(DB)에 저장하고 나중에 불러올 수 있는 기능
+- [ ] 커스텀 입력 저장 — 사용자가 직접 입력한 배열·그래프 데이터를 DB에 저장하고 나중에 불러올 수 있는 기능
 - [ ] 학습 진도 기록 — 알고리즘별 실행 횟수·마지막 실행 시각을 DB에 기록해 학습 히스토리를 제공하는 기능
-- [✅] 알고리즘 북마크 — 즐겨찾는 알고리즘에 북마크를 달고 개인 메모를 DB에 저장할 수 있는 기능
-
-### 예정 백엔드 기술 스택
-
-| 구분        | 기술               | 역할                                              |
-| ----------- | ------------------ | ------------------------------------------------- |
-| 서버        | Express            | REST API 엔드포인트 (회원가입·로그인·데이터 CRUD) |
-| ORM         | Prisma             | DB 스키마 정의 및 타입 안전한 쿼리                |
-| 인증        | JWT                | 로그인 후 토큰 발급, Next.js 미들웨어에서 검증    |
-| 프론트 연동 | Next.js API Routes | Express 서버 프록시 또는 직접 Prisma Client 호출  |
