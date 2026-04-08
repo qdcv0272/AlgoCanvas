@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  const { username, password } = await req.json() as { username?: string; password?: string };
+  const { username, password } = (await req.json()) as { username?: string; password?: string };
 
   if (!username || !password) {
     return NextResponse.json({ message: "아이디와 비밀번호를 입력해주세요." }, { status: 400 });

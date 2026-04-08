@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { userId } = verifyToken(token);
-    const { algorithmId, content } = await req.json() as { algorithmId?: string; content?: string };
+    const { algorithmId, content } = (await req.json()) as { algorithmId?: string; content?: string };
     if (!algorithmId || content === undefined) {
       return NextResponse.json({ message: "algorithmId와 content가 필요합니다." }, { status: 400 });
     }

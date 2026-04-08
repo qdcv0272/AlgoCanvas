@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { userId } = verifyToken(token);
-    const { algorithmId } = await req.json() as { algorithmId?: string };
+    const { algorithmId } = (await req.json()) as { algorithmId?: string };
     if (!algorithmId) return NextResponse.json({ message: "algorithmId가 필요합니다." }, { status: 400 });
 
     await prisma.bookmark.upsert({
