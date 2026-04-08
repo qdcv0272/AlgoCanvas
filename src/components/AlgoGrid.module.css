@@ -1,0 +1,221 @@
+/* ── 알고리즘 카드 그리드 ─────────────────────────────── */
+.grid {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 카드 ─────────────────────────────────────────────── */
+.card {
+  position: relative;
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border-color: var(--accent-color);
+}
+
+/* 카드 내부 링크 (전체 영역 클릭) */
+.cardLink {
+  display: block;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 번호 배지 */
+.badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-family: monospace;
+  color: #4b5563;
+  pointer-events: none;
+}
+
+/* 아이콘 */
+.icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--grad-from, #22d3ee), var(--grad-to, #3b82f6));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.25rem;
+  transition: color 0.15s;
+}
+
+.card:hover .cardTitle {
+  color: var(--accent-color, #22d3ee);
+}
+
+.cardDesc {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0 0 1rem;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #374151;
+  transition: color 0.15s;
+}
+
+.card:hover .arrow {
+  color: var(--accent-color, #22d3ee);
+}
+
+.arrowIcon {
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+.card:hover .arrowIcon {
+  transform: translateX(4px);
+}
+
+/* ── 북마크 / 메모 버튼 ───────────────────────────────── */
+.actions {
+  position: absolute;
+  bottom: 1rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.25rem;
+  z-index: 1;
+}
+
+.actionBtn {
+  width: 1.75rem;
+  height: 1.75rem;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  line-height: 1;
+  padding: 0;
+}
+
+.actionBtn:hover {
+  background: #374151;
+  border-color: #6b7280;
+  color: #e5e7eb;
+}
+
+.bookmarked {
+  color: #fbbf24;
+  border-color: #fbbf24;
+  background: #292524;
+}
+
+.bookmarked:hover {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.hasMemo {
+  border-color: #6366f1;
+  background: #1e1b4b;
+}
+
+/* ── 테마 색상 변수 ───────────────────────────────────── */
+.red {
+  --grad-from: #ef4444;
+  --grad-to: #f97316;
+  --accent-color: #f97316;
+  --border-color: #f9731633;
+}
+.orange {
+  --grad-from: #f97316;
+  --grad-to: #eab308;
+  --accent-color: #eab308;
+  --border-color: #eab30833;
+}
+.yellow {
+  --grad-from: #eab308;
+  --grad-to: #84cc16;
+  --accent-color: #84cc16;
+  --border-color: #84cc1633;
+}
+.lime {
+  --grad-from: #84cc16;
+  --grad-to: #22c55e;
+  --accent-color: #22c55e;
+  --border-color: #22c55e33;
+}
+.cyan {
+  --grad-from: #06b6d4;
+  --grad-to: #3b82f6;
+  --accent-color: #3b82f6;
+  --border-color: #3b82f633;
+}
+.green {
+  --grad-from: #22c55e;
+  --grad-to: #14b8a6;
+  --accent-color: #14b8a6;
+  --border-color: #14b8a633;
+}
+.teal {
+  --grad-from: #14b8a6;
+  --grad-to: #06b6d4;
+  --accent-color: #06b6d4;
+  --border-color: #06b6d433;
+}
+.blue {
+  --grad-from: #3b82f6;
+  --grad-to: #6366f1;
+  --accent-color: #6366f1;
+  --border-color: #6366f133;
+}
+.pink {
+  --grad-from: #ec4899;
+  --grad-to: #f43f5e;
+  --accent-color: #f43f5e;
+  --border-color: #f43f5e33;
+}

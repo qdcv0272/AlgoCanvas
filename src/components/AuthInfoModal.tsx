@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
 import s from "./AuthInfoModal.module.css";
@@ -24,10 +24,16 @@ const FEATURES = [
 ];
 
 export default function AuthInfoModal() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-  if (isLoggedIn()) return null;
+  useEffect(() => {
+    setMounted(true);
+    setOpen(true);
+  }, []);
+
+  if (!mounted || isLoggedIn()) return null;
 
   return (
     <>
