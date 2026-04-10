@@ -16,7 +16,7 @@ export default function AuthNav() {
   const handleLogout = () => {
     logout();
     clear();
-    router.refresh();
+    router.push("/");
   };
 
   if (isLoggedIn() && user) {

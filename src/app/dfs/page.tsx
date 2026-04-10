@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDfsStore, NODES } from "@/store/dfsStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -10,19 +10,20 @@ import DfsGraph from "@/components/dfs/DfsGraph";
 import DfsControls from "@/components/dfs/DfsControls";
 import DfsStackPanel from "@/components/dfs/DfsStackPanel";
 import DfsLegend from "@/components/dfs/DfsLegend";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function DfsPage() {
   const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending } = useDfsStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
 
+  useAlgorithmTracker("dfs");
+
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;

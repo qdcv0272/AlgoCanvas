@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useBinarySearchStore } from "@/store/binarySearchStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -10,19 +10,22 @@ import BinarySearchBanner from "@/components/binary-search/BinarySearchBanner";
 import BinarySearchControls from "@/components/binary-search/BinarySearchControls";
 import BinarySearchLegend from "@/components/binary-search/BinarySearchLegend";
 import BinarySearchStatsPanel from "@/components/binary-search/BinarySearchStatsPanel";
+import CustomInputModal from "@/components/CustomInputModal";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function BinarySearchPage() {
-  const { steps, currentStep, isPlaying, target, init, play, pause, next, prev, reset, ending, randomize, changeTarget } = useBinarySearchStore();
+  const { steps, currentStep, isPlaying, target, init, play, pause, next, prev, reset, ending, randomize, changeTarget, initWithCustom } = useBinarySearchStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  useAlgorithmTracker("binary-search");
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;
@@ -150,6 +153,7 @@ export default function BinarySearchPage() {
             onEnding={ending}
             onRandomize={randomize}
             onChangeTarget={changeTarget}
+            onCustomInput={() => setShowCustomInput(true)}
           />
           <BinarySearchLegend />
         </div>
@@ -158,6 +162,24 @@ export default function BinarySearchPage() {
           <BinarySearchStatsPanel comparisons={comparisons} rangeSize={rangeSize} found={step.found} notFound={step.notFound} target={target} currentStep={currentStep} />
         </div>
       </div>
+
+      {showCustomInput && (
+        <CustomInputModal
+          algorithmId="binary-search"
+          title="Binary Search"
+          placeholder="배열: 숫자들 / 목표: 숫자 (예: 3,7,12,18,25 / 12)"
+          onLoad={(data) => {
+            const parts = data.split("/");
+            const arr = (parts[0] ?? "")
+              .split(",")
+              .map((v) => parseInt(v.trim(), 10))
+              .filter((v) => !isNaN(v) && v > 0);
+            const t = parseInt((parts[1] ?? "").trim(), 10);
+            if (arr.length >= 2 && !isNaN(t)) initWithCustom(arr, t);
+          }}
+          onClose={() => setShowCustomInput(false)}
+        />
+      )}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useBfsStore, BFS_NODES } from "@/store/bfsStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -10,19 +10,20 @@ import BfsGraph from "@/components/bfs/BfsGraph";
 import BfsQueuePanel from "@/components/bfs/BfsQueuePanel";
 import DfsControls from "@/components/dfs/DfsControls";
 import BfsLegend from "@/components/bfs/BfsLegend";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function BfsPage() {
   const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending } = useBfsStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
 
+  useAlgorithmTracker("bfs");
+
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;

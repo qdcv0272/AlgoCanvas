@@ -6,11 +6,12 @@ interface Props {
   n: number;
   onChangeN: (n: number) => void;
   isPlaying: boolean;
+  onCustomInput?: () => void;
 }
 
 const N_OPTIONS = [5, 7, 8, 10, 12];
 
-export default function DpTable({ step, n, onChangeN, isPlaying }: Props) {
+export default function DpTable({ step, n, onChangeN, isPlaying, onCustomInput }: Props) {
   return (
     <div className={s.tableBox}>
       {/* N 선택 */}
@@ -21,6 +22,11 @@ export default function DpTable({ step, n, onChangeN, isPlaying }: Props) {
             {val}
           </button>
         ))}
+        {onCustomInput && (
+          <button className={s.nBtn} onClick={onCustomInput} disabled={isPlaying} title="직접 N 값 입력">
+            📥
+          </button>
+        )}
       </div>
 
       {/* 셀 */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDijkstraStore } from "@/store/dijkstraStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -10,19 +10,20 @@ import DijkstraGraph from "@/components/dijkstra/DijkstraGraph";
 import DijkstraDistancePanel from "@/components/dijkstra/DijkstraDistancePanel";
 import DijkstraLegend from "@/components/dijkstra/DijkstraLegend";
 import DfsControls from "@/components/dfs/DfsControls";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function DijkstraPage() {
   const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending } = useDijkstraStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
 
+  useAlgorithmTracker("dijkstra");
+
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;

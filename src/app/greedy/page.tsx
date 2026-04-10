@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGreedyStore } from "@/store/greedyStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -11,19 +11,22 @@ import GreedyStatsPanel from "@/components/greedy/GreedyStatsPanel";
 import DfsControls from "@/components/dfs/DfsControls";
 import CtrlBtn from "@/components/CtrlBtn";
 import sc from "@/components/sort/sort.module.css";
+import CustomInputModal from "@/components/CustomInputModal";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function GreedyPage() {
-  const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending, randomize } = useGreedyStore();
+  const { steps, currentStep, isPlaying, init, play, pause, next, prev, reset, ending, randomize, initWithCustom } = useGreedyStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  useAlgorithmTracker("greedy");
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;
@@ -111,6 +114,9 @@ export default function GreedyPage() {
               <CtrlBtn onClick={randomize} title="새 금액으로 바꾸기" className={sc.ctrlBtn}>
                 🔢 금액 바꾸기
               </CtrlBtn>
+              <CtrlBtn onClick={() => setShowCustomInput(true)} title="콘요 금액 입력" className={sc.ctrlBtn}>
+                📥 직접 입력
+              </CtrlBtn>
             </div>
           </div>
           <DfsControls isPlaying={isPlaying} isFirst={isFirst} isLast={isLast} onPlay={play} onPause={pause} onNext={next} onPrev={prev} onReset={reset} onEnding={ending} />
@@ -119,6 +125,19 @@ export default function GreedyPage() {
           <GreedyStatsPanel totalCoins={step.totalCoins} originalAmount={step.originalAmount} remaining={step.amount} done={step.done} currentStep={currentStep} />
         </div>
       </div>
+
+      {showCustomInput && (
+        <CustomInputModal
+          algorithmId="greedy"
+          title="Greedy"
+          placeholder="거스름돈 금액 (1~9999, 예: 1370)"
+          onLoad={(data) => {
+            const amount = parseInt(data.trim(), 10);
+            if (!isNaN(amount) && amount >= 1 && amount <= 9999) initWithCustom(amount);
+          }}
+          onClose={() => setShowCustomInput(false)}
+        />
+      )}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDpStore } from "@/store/dpStore";
 import Link from "next/link";
 import s from "@/app/sort-page.module.css";
@@ -10,19 +10,22 @@ import DpTable from "@/components/dp/DpTable";
 import DpLegend from "@/components/dp/DpLegend";
 import DpStatsPanel from "@/components/dp/DpStatsPanel";
 import DfsControls from "@/components/dfs/DfsControls";
+import CustomInputModal from "@/components/CustomInputModal";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function DpPage() {
-  const { steps, currentStep, isPlaying, n, init, play, pause, next, prev, reset, ending, changeN } = useDpStore();
+  const { steps, currentStep, isPlaying, n, init, play, pause, next, prev, reset, ending, changeN, initWithCustom } = useDpStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  useAlgorithmTracker("dp");
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isFirst = currentStep === 0;
@@ -130,7 +133,7 @@ export default function DpPage() {
             swapped={false}
             comparingIndices={step.currentIdx !== null ? [step.currentIdx, step.currentIdx] : null}
           />
-          <DpTable step={step} n={n} onChangeN={changeN} isPlaying={isPlaying} />
+          <DpTable step={step} n={n} onChangeN={changeN} isPlaying={isPlaying} onCustomInput={() => setShowCustomInput(true)} />
           <DfsControls isPlaying={isPlaying} isFirst={isFirst} isLast={isLast} onPlay={play} onPause={pause} onNext={next} onPrev={prev} onReset={reset} onEnding={ending} />
           <DpLegend />
         </div>
@@ -138,6 +141,19 @@ export default function DpPage() {
           <DpStatsPanel n={n} filledCount={filledCount} result={result} done={step.done} currentStep={currentStep} />
         </div>
       </div>
+
+      {showCustomInput && (
+        <CustomInputModal
+          algorithmId="dp"
+          title="DP (Fibonacci)"
+          placeholder="피보나치 N (2~20, 예: 15)"
+          onLoad={(data) => {
+            const val = parseInt(data.trim(), 10);
+            if (!isNaN(val) && val >= 2 && val <= 20) initWithCustom(val);
+          }}
+          onClose={() => setShowCustomInput(false)}
+        />
+      )}
     </main>
   );
 }

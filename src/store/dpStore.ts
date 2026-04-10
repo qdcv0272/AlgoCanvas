@@ -58,6 +58,7 @@ interface DpStore {
   speed: number;
   n: number;
   init: () => void;
+  initWithCustom: (n: number) => void;
   play: () => void;
   pause: () => void;
   next: () => void;
@@ -82,6 +83,11 @@ export const useDpStore = create<DpStore>((set, get) => ({
   },
 
   changeN(n: number) {
+    if (playTimer) clearTimeout(playTimer);
+    set({ steps: buildSteps(n), currentStep: 0, isPlaying: false, n });
+  },
+
+  initWithCustom(n: number) {
     if (playTimer) clearTimeout(playTimer);
     set({ steps: buildSteps(n), currentStep: 0, isPlaying: false, n });
   },

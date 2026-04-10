@@ -27,6 +27,7 @@ interface BinarySearchStore {
   target: number;
 
   init: () => void;
+  initWithCustom: (arr: number[], target: number) => void;
   play: () => void;
   pause: () => void;
   next: () => void;
@@ -188,6 +189,13 @@ export const useBinarySearchStore = create<BinarySearchStore>((set, get) => ({
     const target = pickTarget(arr);
     const steps = buildSteps(arr, target);
     set({ steps, currentStep: 0, isPlaying: false, originalArr: arr, target });
+  },
+
+  initWithCustom(arr: number[], target: number) {
+    if (playTimer) clearTimeout(playTimer);
+    const sorted = [...arr].sort((a, b) => a - b);
+    const steps = buildSteps(sorted, target);
+    set({ steps, currentStep: 0, isPlaying: false, originalArr: sorted, target });
   },
 
   changeTarget() {

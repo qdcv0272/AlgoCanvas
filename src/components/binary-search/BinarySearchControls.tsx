@@ -13,9 +13,10 @@ interface Props {
   onEnding: () => void;
   onRandomize: () => void;
   onChangeTarget: () => void;
+  onCustomInput?: () => void;
 }
 
-export default function BinarySearchControls({ isPlaying, isFirst, isLast, onPlay, onPause, onNext, onPrev, onReset, onEnding, onRandomize, onChangeTarget }: Props) {
+export default function BinarySearchControls({ isPlaying, isFirst, isLast, onPlay, onPause, onNext, onPrev, onReset, onEnding, onRandomize, onChangeTarget, onCustomInput }: Props) {
   return (
     <div className={s.controls}>
       <div className={s.btnRow}>
@@ -25,6 +26,11 @@ export default function BinarySearchControls({ isPlaying, isFirst, isLast, onPla
         <CtrlBtn onClick={onChangeTarget} title="같은 배열, 목표값만 변경" className={s.ctrlBtn}>
           🎯 목표 바꾸기
         </CtrlBtn>
+        {onCustomInput && (
+          <CtrlBtn onClick={onCustomInput} title="커스텀 배열·목표 입력" className={s.ctrlBtn}>
+            📥 직접 입력
+          </CtrlBtn>
+        )}
       </div>
       <div className={s.btnRow}>
         <CtrlBtn onClick={onReset} disabled={isFirst} title="처음으로" className={s.ctrlBtn}>

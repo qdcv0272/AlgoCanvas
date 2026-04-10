@@ -1,0 +1,251 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.5rem;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.18s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.closeBtn:hover {
+  color: #e5e7eb;
+}
+
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.textInput {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 0.5rem;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  padding: 0.6rem 0.875rem;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+}
+.textInput:focus {
+  border-color: #6366f1;
+}
+.textInput::placeholder {
+  color: #374151;
+}
+
+.error {
+  font-size: 0.8rem;
+  color: #f87171;
+  margin: 0;
+}
+
+.saveRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.labelInput {
+  flex: 1;
+  font-family: inherit !important;
+}
+
+.saveBtn {
+  white-space: nowrap;
+  background: #1e3a5f;
+  border: 1px solid #2563eb;
+  border-radius: 0.5rem;
+  color: #93c5fd;
+  font-size: 0.82rem;
+  padding: 0.6rem 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.saveBtn:hover:not(:disabled) {
+  background: #1d4ed8;
+  color: #fff;
+}
+.saveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.applyBtn {
+  width: 100%;
+  background: #14532d;
+  border: 1px solid #16a34a;
+  border-radius: 0.5rem;
+  color: #86efac;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.applyBtn:hover {
+  background: #15803d;
+  color: #fff;
+}
+
+.savedSection {
+  border-top: 1px solid #1f2937;
+  padding-top: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.savedTitle {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin: 0;
+}
+
+.savedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.savedItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.savedMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.savedLabel {
+  font-size: 0.82rem;
+  color: #c4b5fd;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.savedData {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-family: "Courier New", monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+.savedActions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.loadBtn {
+  font-size: 0.78rem;
+  background: #1e3a5f;
+  border: 1px solid #2563eb;
+  border-radius: 5px;
+  color: #93c5fd;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.loadBtn:hover {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.deleteSavedBtn {
+  font-size: 0.78rem;
+  background: none;
+  border: 1px solid #7f1d1d;
+  border-radius: 5px;
+  color: #f87171;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.deleteSavedBtn:hover {
+  background: #450a0a;
+}

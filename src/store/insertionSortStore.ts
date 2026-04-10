@@ -24,6 +24,7 @@ interface InsertionSortStore {
   originalArr: number[];
 
   init: (size?: number) => void;
+  initWithCustom: (arr: number[]) => void;
   play: () => void;
   pause: () => void;
   next: () => void;
@@ -156,6 +157,13 @@ export const useInsertionSortStore = create<InsertionSortStore>((set, get) => ({
     if (playTimer) clearTimeout(playTimer);
     const { isReversed } = get();
     const arr = generateArray(10);
+    const steps = buildSteps(arr, isReversed);
+    set({ steps, currentStep: 0, isPlaying: false, originalArr: arr });
+  },
+
+  initWithCustom(arr: number[]) {
+    if (playTimer) clearTimeout(playTimer);
+    const { isReversed } = get();
     const steps = buildSteps(arr, isReversed);
     set({ steps, currentStep: 0, isPlaying: false, originalArr: arr });
   },

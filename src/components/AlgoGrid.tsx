@@ -26,7 +26,7 @@ interface MemoTarget {
 
 export default function AlgoGrid() {
   const { token, isLoggedIn } = useAuthStore();
-  const { bookmarks, memos, fetchAll, toggleBookmark, saveMemo, deleteMemo } = useUserDataStore();
+  const { bookmarks, memos, history, fetchAll, toggleBookmark, saveMemo, deleteMemo } = useUserDataStore();
   const [memoTarget, setMemoTarget] = useState<MemoTarget | null>(null);
   const loggedIn = isLoggedIn();
 
@@ -54,11 +54,17 @@ export default function AlgoGrid() {
           const algId = cat.href.slice(1);
           const isBookmarked = bookmarks.includes(algId);
           const hasMemo = !!memos[algId];
+          const runCount = history[algId]?.runCount ?? 0;
 
           return (
             <div key={cat.id} className={`${s.card} ${s[cat.theme]}`}>
               <Link href={cat.href} className={s.cardLink}>
                 <span className={s.badge}>#{String(cat.id).padStart(2, "0")}</span>
+                {loggedIn && runCount > 0 && (
+                  <span className={s.runBadge} title={`${runCount}회 학습`}>
+                    ▶ {runCount}회
+                  </span>
+                )}
                 <div className={s.icon}>{cat.icon}</div>
                 <h2 className={s.cardTitle}>{cat.title}</h2>
                 <p className={s.cardDesc}>{cat.description}</p>

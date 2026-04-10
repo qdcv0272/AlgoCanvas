@@ -14,9 +14,10 @@ interface SortControlsProps {
   onEnding: () => void;
   onRandomize: () => void;
   onReverse: () => void;
+  onCustomInput?: () => void;
 }
 
-export default function SortControls({ isPlaying, isFirst, isLast, isReversed, onPlay, onPause, onNext, onPrev, onReset, onEnding, onRandomize, onReverse }: SortControlsProps) {
+export default function SortControls({ isPlaying, isFirst, isLast, isReversed, onPlay, onPause, onNext, onPrev, onReset, onEnding, onRandomize, onReverse, onCustomInput }: SortControlsProps) {
   return (
     <div className={s.controls}>
       <div className={s.btnRow}>
@@ -26,6 +27,11 @@ export default function SortControls({ isPlaying, isFirst, isLast, isReversed, o
         <CtrlBtn onClick={onReverse} title="오름차순/내림차순 전환" active={isReversed} className={s.ctrlBtn} activeClassName={s.ctrlBtnActive}>
           🔄 {isReversed ? "내림차순" : "오름차순"}
         </CtrlBtn>
+        {onCustomInput && (
+          <CtrlBtn onClick={onCustomInput} title="커스텀 배열 입력" className={s.ctrlBtn}>
+            📥 직접 입력
+          </CtrlBtn>
+        )}
       </div>
       <div className={s.btnRow}>
         <CtrlBtn onClick={onReset} disabled={isFirst} title="처음으로" className={s.ctrlBtn}>

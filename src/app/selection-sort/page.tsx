@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelectionSortStore } from "@/store/selectionSortStore";
 import Link from "next/link";
 import s from "../sort-page.module.css";
@@ -10,19 +10,22 @@ import SortProgressBanner from "@/components/sort/SortProgressBanner";
 import SortControls from "@/components/sort/SortControls";
 import SortStatsPanel from "@/components/sort/SortStatsPanel";
 import SortLegend from "@/components/sort/SortLegend";
+import CustomInputModal from "@/components/CustomInputModal";
+import { useAlgorithmTracker } from "@/hooks/useAlgorithmTracker";
 
 export default function SelectionSortPage() {
-  const { steps, currentStep, isPlaying, isReversed, init, play, pause, next, prev, reset, ending, randomize, reverse } = useSelectionSortStore();
+  const { steps, currentStep, isPlaying, isReversed, init, play, pause, next, prev, reset, ending, randomize, reverse, initWithCustom } = useSelectionSortStore();
 
-  const initialized = useRef(false);
   const [showGuide, setShowGuide] = useState(true);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  useAlgorithmTracker("selection-sort");
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (steps.length === 0) {
       init();
-      initialized.current = true;
     }
-  }, [init]);
+  }, [steps.length, init]);
 
   const step = steps[currentStep];
   const isLast = currentStep === steps.length - 1;
@@ -157,6 +160,7 @@ export default function SelectionSortPage() {
             onEnding={ending}
             onRandomize={randomize}
             onReverse={reverse}
+            onCustomInput={() => setShowCustomInput(true)}
           />
           <SortLegend />
         </div>
@@ -165,6 +169,22 @@ export default function SelectionSortPage() {
           <SortStatsPanel comparisons={comparisons} swaps={swaps} sortedCount={step.sortedCount} totalBars={step.bars.length} currentStep={currentStep} />
         </div>
       </div>
+
+      {showCustomInput && (
+        <CustomInputModal
+          algorithmId="selection-sort"
+          title="Selection Sort"
+          placeholder="쉼표로 구분된 숫자 (예: 5, 3, 8, 1, 9, 2)"
+          onLoad={(data) => {
+            const arr = data
+              .split(",")
+              .map((v) => parseInt(v.trim(), 10))
+              .filter((v) => !isNaN(v) && v > 0);
+            if (arr.length >= 2) initWithCustom(arr);
+          }}
+          onClose={() => setShowCustomInput(false)}
+        />
+      )}
     </main>
   );
 }

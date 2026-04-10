@@ -91,6 +91,7 @@ interface GreedyStore {
   speed: number;
   amount: number;
   init: () => void;
+  initWithCustom: (amount: number) => void;
   play: () => void;
   pause: () => void;
   next: () => void;
@@ -117,6 +118,11 @@ export const useGreedyStore = create<GreedyStore>((set, get) => ({
   randomize() {
     if (playTimer) clearTimeout(playTimer);
     const amount = randomAmount();
+    set({ steps: buildSteps(amount), currentStep: 0, isPlaying: false, amount });
+  },
+
+  initWithCustom(amount: number) {
+    if (playTimer) clearTimeout(playTimer);
     set({ steps: buildSteps(amount), currentStep: 0, isPlaying: false, amount });
   },
 
