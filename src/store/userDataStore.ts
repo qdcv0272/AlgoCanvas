@@ -1,16 +1,14 @@
 import { create } from "zustand";
 import {
-  apiFetchBookmarks,
+  apiFetchAllUserData,
   apiAddBookmark,
   apiRemoveBookmark,
-  apiFetchMemos,
   apiSaveMemo,
   apiDeleteMemo,
   apiFetchCustomInputs,
   apiSaveCustomInput,
   apiDeleteCustomInput,
   CustomInputItem,
-  apiFetchHistory,
   apiRecordRun,
   HistoryEntry,
 } from "@/lib/api";
@@ -38,7 +36,7 @@ export const useUserDataStore = create<UserDataState>()((set, get) => ({
   history: {},
 
   fetchAll: async (token) => {
-    const [bookmarks, memos, history] = await Promise.all([apiFetchBookmarks(token), apiFetchMemos(token), apiFetchHistory(token)]);
+    const { bookmarks, memos, history } = await apiFetchAllUserData(token);
     set({ bookmarks, memos, history });
   },
 

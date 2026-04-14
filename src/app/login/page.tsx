@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiLogin } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
+import { useUserDataStore } from "@/store/userDataStore";
 import s from "../auth.module.css";
 
 export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const fetchAll = useUserDataStore((state) => state.fetchAll);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +26,8 @@ export default function LoginPage() {
     try {
       const { token, user } = await apiLogin(username, password);
       setAuth(token, user);
+      // 페이지 이동과 동시에 데이터 prefetch (await 없이 병렬 실행)
+      fetchAll(token);
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
